@@ -5,9 +5,8 @@ const bcrypt = require('bcrypt')
 const {verifyToken} = require('../common/middleware/auth')
 const {Person} = require('../common/db/models')
 
-router.use(verifyToken)
 
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         let persons = await Person.findAll()
         res.json(persons)
@@ -34,7 +33,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
     try {
 
         let person = await Person.findOne({where: {id: req.params.id}})
