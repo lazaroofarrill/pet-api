@@ -20,7 +20,10 @@ function verifyToken(req, res, next) {
             next()
         })
     } catch (e) {
-        res.status(500).send(e.message)
+        if (e.code.indexOf('INVALID_STATUS_CODE')) {
+            return res.sendStatus(401)
+        }
+        res.status(500).json(e)
     }
 }
 
