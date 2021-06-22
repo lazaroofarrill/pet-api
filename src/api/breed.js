@@ -1,10 +1,13 @@
 const express = require('express')
 const router = express.Router()
+const {verifyToken} = require('../common/middleware/auth')
 
 const {Breed} = require('../common/db/models')
 
 
 module.exports = router
+router.use(verifyToken)
+
 
 router.get('/', async (req, res) => {
     try {

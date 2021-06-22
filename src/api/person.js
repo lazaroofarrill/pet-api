@@ -1,7 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const bcrypt = require('bcrypt')
 
+const {verifyToken} = require('../common/middleware/auth')
 const {Person} = require('../common/db/models')
+
+router.use(verifyToken)
 
 router.get('/', async (req, res) => {
     try {
@@ -13,12 +17,15 @@ router.get('/', async (req, res) => {
     }
 })
 
+const saltRounds = 10
+
 router.post('/', async (req, res) => {
     let username = req.body.username
     let password = req.body.password
     if (!username || !password) {
         res.status(400).send('Dato requerido')
     } else {
+        req.body.password = await bcrypt.hash(password, saltRounds)
         let newPerson = await Person.create(req.body).catch(e => {
             console.log(e.message)
             res.status(500).send('error de servidor')
