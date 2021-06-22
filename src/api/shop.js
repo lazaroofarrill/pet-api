@@ -66,11 +66,10 @@ router.put('/:id', async (req, res) => {
 router.post('/sell/:id', async (req, res) => {
     try {
         let body = req.body
-        let personId = body.person
         let animalId = body.animal
         let name = body.name
 
-        let person = await Person.findOne({where: {id: personId}})
+        let person = await Person.findOne({where: {username: req.user.user}})
         let animal = await Animal.findOne({where: {id: animalId}})
 
         if (!animal || !person) {
@@ -84,7 +83,7 @@ router.post('/sell/:id', async (req, res) => {
             await animal.update({amount: animal.amount})
             let newPet = await Pet.create({
                 name: name,
-                OwnerId: personId,
+                OwnerId: person.id,
                 BreedId: animal.BreedId
             })
             res.status(201).json(newPet)

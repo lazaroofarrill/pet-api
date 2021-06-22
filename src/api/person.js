@@ -3,12 +3,17 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 
 const {verifyToken} = require('../common/middleware/auth')
-const {Person} = require('../common/db/models')
+const {Person, Pet} = require('../common/db/models')
 
 
 router.get('/', verifyToken, async (req, res) => {
     try {
-        let persons = await Person.findAll()
+        let persons = await Person.findAll({
+            include: {
+                model: Pet,
+                as: 'pets'
+            }
+        })
         res.json(persons)
     } catch (e) {
         res.sendStatus(500).send("Error de servidor")

@@ -9,7 +9,6 @@ function verifyToken(req, res, next) {
             return res.sendStatus(401)
         }
 
-        console.log(token)
         jwt.verify(token, process.env.SECRET, (err, user) => {
             console.log(err)
 
