@@ -7,7 +7,6 @@ const pet = require('./api/pet')
 const login = require('./api/login')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
-const {verifyToken} = require('./common/middleware/auth')
 
 dotenv.config()
 
@@ -18,7 +17,7 @@ app.get('/', (req, res) => {
 })
 
 app.user
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}))
 app.use('/person', person)
 app.use('/breed', breed)
 app.use('/shop', shop)
